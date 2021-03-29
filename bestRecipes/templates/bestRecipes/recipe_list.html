@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="row">
+  <div class="mx-auto col-md-8">
+    <div class="row">
+		  {% if object_list %}
+      {% for obj in object_list %}
+      <div class="col-md-6">
+			  <div class="card mb-4">
+			    <img class="card-img-top" src="{{ obj.image.url }}" alt="{{ object.title }}" style="height:200px">
+			      <div class="card-body">
+            <h3 class="card-title text-center">
+              <a href="{% url 'detail' obj.slug %}">{{ obj.title }}</a>
+            </h3>
+            <p class="card-text">
+              <div class="row">
+                <div class="col-md-12"><b>Время приготовления:</b> {{ obj.cooking_time }} минут</div>
+                <div class="col-md-12"><b>Сложность рецепта:</b> {{ obj.difficulty }}</div>
+                <div class="col-md-12">
+                  <b>Категории: </b>
+                  {% for cat in obj.get_categories %}
+                  <a href="?q={{ request.GET.q }}&cat={{ cat }}">{{ cat }}</a>
+                  {% endfor %}
+                </div>
+                <div class="col-md-12"><b>Число комментариев:</b> {{ obj.comments_count }}</div>
+              </div>
+            </p>
+            <a href="{% url 'detail' obj.slug %}" class="btn btn-info">Посмотреть рецепт</a>
+          </div>
+          <div class="card-footer text-muted">
+            Добавлено: {{obj.updated_at|naturaltime}}, by <b>{{ obj.author }}</b>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <P class="btn btn-danger btn-lg">Рецептов не найдено!</P>
+      {% endif %}
+    </div>
+
+    {% if is_paginated %}
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr; Вперед</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="">&larr; Вперед</a>
+      </li>
+      {% endif %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Назад &rarr;</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#">Назад &rarr;</a>
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endblock content %}

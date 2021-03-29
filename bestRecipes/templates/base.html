@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}BestRecipes{% endblock title %}</title>
+    {% include 'styles.html' %}
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <div class="container">
+        {% block content %}{% endblock content %}
+        {% block widgets %}{% include 'widgets.html' %}{% endblock widgets %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<div class="col-md-4">
+
+    {% if request.user.is_authenticated %}
+    <div class="card my-4">
+        <div class="card text-center bg-info text-white">
+            <a class="btn btn-primary btn-lg" href="{% url 'create' %}" role="button">Добавить рецепт</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card my-4">
+        <div class="card text-center bg-info text-white">
+            <h5 class="card-header">Поиск</h5>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'home' %}" method="get">
+                <div class="input-group">
+                    <input type="search" name='q' class="form-control" placeholder="Введите название блюда..." value="{{ request.GET.q }}" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="submit">Найти</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card my-4">
+        <div class="card text-center bg-info text-white">
+            <h5 class="card-header">Категории</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for key, value in categories.items %}
+                <div class="col-md-4">
+                <a href="{% url 'home' %}?q={{ request.GET.q }}&cat={{ key }}">{{ key }}</a> <b>{{ value }}</b>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>

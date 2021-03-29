@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block widgets %}{% endblock widgets %}
+{% block content %}
+<div class="row my-4">
+    <div class="col-md-4 offset-md-4" style="margin-top:40px">
+        <div class="card">
+            <h4 class="card-header text-center">Вход</h4>
+            <div class="card-body">
+                {% if form.errors %}
+                <p style="color:red">Ник пользователя и пароль не совпадают!</p>
+                {% endif %}
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="id_username" class="form-control" placeholder="Введите username">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Password:</label>
+                        <input type="password" name="password" id="id_password" class="form-control" placeholder="Введите пароль">
+                    </div>
+                    <button type="submit" class="btn btn-info">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

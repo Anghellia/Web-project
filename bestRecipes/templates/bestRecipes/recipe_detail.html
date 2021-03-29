@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mt-4">{{ object.title }}</h1>
+        <p> Рецепт добавлен by <b>{{ object.author }}</b> {{ object.created_at|naturaltime }}</p>
+        <hr>
+        <img class="img-fluid" src="{{ object.image.url }}" alt="{{ object.title }}">
+        <table class="table table-bordered">
+            <tbody>
+                <tr class="table-primary">
+                    <td><b>Сложность рецепта</b></td>
+                    <td>{{ object.difficulty }}</td>
+                </tr>
+                <tr class="table-primary">
+                    <td><b>Время приготовления</b></td>
+                    <td>{{ object.cooking_time }} минут</td>
+                </tr>
+                <tr class="table-primary">
+                    <td><b>Категории:</b></td>
+                    <td>
+                        {% for cat in object.get_categories %}
+                        <a href="{% url 'home' %}?q={{ request.GET.q }}&cat={{ cat }}">{{ cat }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 class="mt-5">Рецепт</h3>
+        <br>
+        <p>{{ object.text }}</p>
+        <hr>
+
+        <h3 class="mt-0">Комментарии</h3>
+        <br>
+        {% if object.comments.all %}
+        {% for comment in object.comments.all %}
+        <div class="media mb-3">
+            <div class="media-body">
+                <h5>{{ comment.author }}</h5>
+                <p>{{ comment.text }}<br>
+                    <small><i class="far fa-clock"></i>&nbsp{{ comment.created_at }}</small>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>Комментариев не найдено...</p><br><br>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+        <div class="card my-4">
+            <h5 class="card-header">Оставьте комментарий:</h5>
+            <div class="card-body">
+                <form action="." method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" name='slug' value="{{ object.slug }}">
+                        <textarea name="comment" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-info">Отправить</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endblock content %}
